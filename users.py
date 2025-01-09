@@ -11,7 +11,7 @@ cursor.execute('''
     address_2 TEXT,
     nif INTEGER,
     is_admin INTEGER,
-    CONSTRAINT title UNIQUE(title)
+    CONSTRAINT email UNIQUE(email)
     )
 ''')
 connection.commit()
