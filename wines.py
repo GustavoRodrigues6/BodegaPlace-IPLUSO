@@ -11,6 +11,7 @@ cursor.execute('''
     description TEXT,
     nutrition DOUBLE,
     supplier INTEGER,
+    stock INTEGER,
     FOREIGN KEY (supplier) REFERENCES users(id)
     )
 ''')
