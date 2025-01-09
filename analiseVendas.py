@@ -1,5 +1,4 @@
 import sqlite3
-import pandas as pd
 
 # Função para criar e popular a tabela de vendas mensais
 def criar_tabela_vendas():
