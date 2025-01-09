@@ -1,28 +1,53 @@
+import sqlite3
 import pandas as pd
-import matplotlib.pyplot as plt
 
-# Dados fictícios de vendas mensais
-dados_vendas = {
-    'Mês': ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-    'Vendas': [1500, 2300, 1800, 2200, 2500, 2700, 3000, 3200, 3100, 2900, 3300, 3600]
-}
+# Função para criar e popular a tabela de vendas mensais
+def criar_tabela_vendas():
+    conn = sqlite3.connect('vendas.db')
+    cursor = conn.cursor()
+    
+    # Criar a tabela de vendas mensais
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS vendas_mensais (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        mes TEXT,
+        ano INTEGER,
+        valor_venda REAL
+    )
+    ''')
+    
+    # Inserir alguns dados de exemplo
+    cursor.executemany('''
+    INSERT INTO vendas_mensais (mes, ano, valor_venda)
+    VALUES (?, ?, ?)
+    ''', [
+        ('Janeiro', 2023, 15000.75),
+        ('Fevereiro', 2023, 12500.50),
+        ('Março', 2023, 17500.00),
+        ('Abril', 2023, 16000.20)
+    ])
+    
+    conn.commit()
+    conn.close()
 
-# Criação do DataFrame
-df_vendas = pd.DataFrame(dados_vendas)
+# Função para visualizar a tabela de vendas mensais
+def visualizar_tabela_vendas():
+    conn = sqlite3.connect('vendas.db')
+    df = pd.read_sql_query('SELECT * FROM vendas_mensais', conn)
+    conn.close()
+    print(df)
+    return df
 
-# Visualização da tabela de vendas mensais
-print("Tabela de Vendas Mensais:")
-print(df_vendas)
+# Função para exportar a tabela de vendas para CSV
+def exportar_tabela_vendas(df):
+    df.to_csv('vendas_mensais.csv', index=False)
+    print("A tabela de vendas mensais foi exportada para 'vendas_mensais.csv'")
 
-# Exportação da tabela de vendas em formato CSV
-df_vendas.to_csv('tabela_vendas_mensais.csv', index=False)
-print("Tabela de vendas exportada para 'tabela_vendas_mensais.csv'.")
+# Criar e popular a tabela de vendas
+criar_tabela_vendas()
 
-# Plotando o gráfico de vendas mensais
-plt.figure(figsize=(10, 5))
-plt.plot(df_vendas['Mês'], df_vendas['Vendas'], marker='o')
-plt.title('Vendas Mensais')
-plt.xlabel('Mês')
-plt.ylabel('Vendas')
-plt.grid(True)
-plt.show()
+# Visualizar a tabela de vendas
+df = visualizar_tabela_vendas()
+
+# Exportar a tabela de vendas para CSV
+exportar_tabela_vendas(df)
