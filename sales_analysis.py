@@ -1,52 +1,53 @@
 import sqlite3
+import pandas as pd
 
-# Função para criar e popular a tabela de vendas mensais
-def criar_tabela_vendas():
-    conn = sqlite3.connect('vendas.db')
+# Function to create and populate the monthly sales table
+def create_sales_table():
+    conn = sqlite3.connect('sales.db')
     cursor = conn.cursor()
     
-    # Criar a tabela de vendas mensais
+    # Create the monthly sales table
     cursor.execute('''
-    CREATE TABLE IF NOT EXISTS vendas_mensais (
+    CREATE TABLE IF NOT EXISTS monthly_sales (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        mes TEXT,
-        ano INTEGER,
-        valor_venda REAL
+        month TEXT,
+        year INTEGER,
+        sales_value REAL
     )
     ''')
     
-    # Inserir alguns dados de exemplo
+    # Insert some sample data
     cursor.executemany('''
-    INSERT INTO vendas_mensais (mes, ano, valor_venda)
+    INSERT INTO monthly_sales (month, year, sales_value)
     VALUES (?, ?, ?)
     ''', [
-        ('Janeiro', 2023, 15000.75),
-        ('Fevereiro', 2023, 12500.50),
-        ('Março', 2023, 17500.00),
-        ('Abril', 2023, 16000.20)
+        ('January', 2023, 15000.75),
+        ('February', 2023, 12500.50),
+        ('March', 2023, 17500.00),
+        ('April', 2023, 16000.20)
     ])
     
     conn.commit()
     conn.close()
 
-# Função para visualizar a tabela de vendas mensais
-def visualizar_tabela_vendas():
-    conn = sqlite3.connect('vendas.db')
-    df = pd.read_sql_query('SELECT * FROM vendas_mensais', conn)
+# Function to view the monthly sales table
+def view_sales_table():
+    conn = sqlite3.connect('sales.db')
+    df = pd.read_sql_query('SELECT * FROM monthly_sales', conn)
     conn.close()
     print(df)
     return df
 
-# Função para exportar a tabela de vendas para CSV
-def exportar_tabela_vendas(df):
-    df.to_csv('vendas_mensais.csv', index=False)
-    print("A tabela de vendas mensais foi exportada para 'vendas_mensais.csv'")
+# Function to export the sales table to CSV
+def export_sales_table(df):
+    df.to_csv('monthly_sales.csv', index=False)
+    print("The monthly sales table has been exported to 'monthly_sales.csv'")
 
-# Criar e popular a tabela de vendas
-criar_tabela_vendas()
+# Create and populate the sales table
+create_sales_table()
 
-# Visualizar a tabela de vendas
-df = visualizar_tabela_vendas()
+# View the sales table
+df = view_sales_table()
 
-# Exportar a tabela de vendas para CSV
-exportar_tabela_vendas(df)
+# Export the sales table to CSV
+export_sales_table(df)
