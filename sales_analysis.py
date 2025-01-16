@@ -1,5 +1,6 @@
 import sqlite3
-import pandas as pd
+import tkinter as tk
+from tkinter import ttk
 
 # Function to create and populate the monthly sales table
 def create_sales_table():
@@ -69,3 +70,29 @@ export_sales_table(df)
 
 # View sales for a specific month and year
 view_sales('March', 2023)
+# Function to display the sales table using Tkinter
+def display_sales_table():
+    conn = sqlite3.connect('sales.db')
+    df = pd.read_sql_query('SELECT * FROM monthly_sales', conn)
+    conn.close()
+
+    root = tk.Tk()
+    root.title("Monthly Sales Table")
+
+    frame = ttk.Frame(root)
+    frame.pack(fill=tk.BOTH, expand=True)
+
+    tree = ttk.Treeview(frame, columns=list(df.columns), show='headings')
+    tree.pack(fill=tk.BOTH, expand=True)
+
+    for col in df.columns:
+        tree.heading(col, text=col)
+        tree.column(col, anchor=tk.CENTER)
+
+    for index, row in df.iterrows():
+        tree.insert("", tk.END, values=list(row))
+
+    root.mainloop()
+
+# Display the sales table using Tkinter
+display_sales_table()
