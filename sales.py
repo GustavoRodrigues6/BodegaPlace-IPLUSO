@@ -1,3 +1,5 @@
+from db_wines import WINES
+
 class Wine:
     def __init__(self, name, brand, year, price, stock, supplier):
         self.name = name
@@ -19,12 +21,17 @@ class Wine:
         self.stock += quantity
         print(f'Restocked {quantity} bottles of {self.brand} {self.name} ({self.year}). New stock: {self.stock}')
 
-# Example usage
-if __name__ == "__main__":
-    wine1 = Wine("Cabernet Sauvignon", "Brand A", 2015, 20.0, 50, "Supplier X")
-    wine2 = Wine("Merlot", "Brand B", 2018, 15.0, 30, "Supplier Y")
+def initialize_wines(wine_data):
+    wines = []
+    for wine in wine_data:
+        wine_obj = Wine(
+            name=wine["Brand"],
+            brand=wine["Brand"],
+            year=wine["Year"],
+            price=wine["Price"],
+            stock=wine["Stock"],
+            supplier=wine["Supplier"]
+        )
+        wines.append(wine_obj)
+    return wines
 
-    wine1.sell(10)
-    wine2.sell(5)
-    wine1.restock(20)
-    wine2.sell(50)
