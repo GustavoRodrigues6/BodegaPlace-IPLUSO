@@ -25,8 +25,6 @@ def get_wine_supplier(uid):
     :param uid: User ID
     :return: Supplier ID
     """
-    # search user table for the UID
-    # returns user
     connection = sqlite3.connect('users.db')
     cursor = connection.cursor()
 
