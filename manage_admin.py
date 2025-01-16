@@ -48,3 +48,27 @@ def search_user_by_nif(user_nif):
     if result:
         return result[0]
     return None
+
+def delete_user(user_id):
+    """
+    Delete user by ID
+    :param user_id: User ID
+    """
+    connection = sqlite3.connect("users.db")
+    cursor = connection.cursor()
+    cursor.execute("DELETE FROM users WHERE id = ?", (user_id,))
+    connection.commit()
+    connection.close()
+
+def search_and_delete_user(user_nif):
+    """
+    Search user by NIF and delete if found
+    :param user_nif: User NIF
+    """
+    user = search_user_by_nif(user_nif)
+    if user:
+        user_id, user_name = user
+        print(f"User found: {user_name} (ID: {user_id})")
+        delete_user(user_id)
+    else:
+        print("User not found.")
