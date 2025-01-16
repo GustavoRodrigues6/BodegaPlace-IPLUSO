@@ -43,6 +43,21 @@ def export_sales_table(df):
     df.to_csv('monthly_sales.csv', index=False)
     print("The monthly sales table has been exported to 'monthly_sales.csv'")
 
+# Function to view sales for a specific month and year
+def view_sales(month, year):
+    conn = sqlite3.connect('sales.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+    SELECT * FROM monthly_sales WHERE month = ? AND year = ?
+    ''', (month, year))
+    rows = cursor.fetchall()
+    conn.close()
+    if rows:
+        for row in rows:
+            print(row)
+    else:
+        print(f'No sales data found for {month} {year}')
+
 # Create and populate the sales table
 create_sales_table()
 
@@ -51,3 +66,6 @@ df = view_sales_table()
 
 # Export the sales table to CSV
 export_sales_table(df)
+
+# View sales for a specific month and year
+view_sales('March', 2023)
