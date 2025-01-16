@@ -1,3 +1,5 @@
+import sqlite3
+
 connection = sqlite3.connect('wines.db')
 cursor = connection.cursor()
 
