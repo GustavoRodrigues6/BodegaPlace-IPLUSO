@@ -8,9 +8,10 @@ from utils_tkinter import (
     create_label,
     create_button,
     create_entry,
-    center_window
+    center_window, table_wines
 )
-
+import wines
+import db_wines
 def on_submit():
     name = entry_name.get()
     if not name.strip():
@@ -25,24 +26,11 @@ def on_clear():
 
 app = ctk.CTk()
 app.title("CustomTkinter Utilities Demo")
-center_window(app, 400, 300)
+center_window(app, 800, 700)
 
 # Create the main application frame
 app_frame = ctk.CTkFrame(app)
-app_frame.pack(fill="both", expand=True, padx=20, pady=20)
-
-# Create and add widgets to the frame
-label = create_label(app_frame, text="Enter your name:", font=("Arial", 14))
-label.pack(pady=(0, 10))
-
-entry_name = create_entry(app_frame, placeholder="Your Name", font=("Arial", 12))
-entry_name.pack(pady=(0, 20))
-
-btn_submit = create_button(app_frame, text="Submit", command=on_submit, font=("Arial", 12))
-btn_submit.pack(side="left", padx=(0, 10))
-
-btn_clear = create_button(app_frame, text="Clear Screen", command=on_clear, font=("Arial", 12))
-btn_clear.pack(side="left", padx=(10, 0))
+table_wines(app)
 
 # Start the application
 app.mainloop()

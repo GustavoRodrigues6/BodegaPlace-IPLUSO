@@ -36,6 +36,3 @@ def get_user(user_id):
     user = cursor.fetchone()
     connection.close()
     return User(*user) if user else None
-
-
-

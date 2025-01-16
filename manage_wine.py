@@ -1,7 +1,6 @@
 import sqlite3
-from wines import Wine
 
-def insert_wines(brand, year, price, region, description, nutrition, supplier, stock):
+def insert_wine(brand, year, price, region, description, nutrition, supplier, stock):
     connection = sqlite3.connect('wines.db')
     cursor = connection.cursor()
     cursor.execute('''
@@ -17,7 +16,7 @@ def get_wines():
     cursor.execute('SELECT * FROM wines')
     wines = cursor.fetchall()
     connection.close()
-    return [Wine(*wine) for wine in wines]
+    return wines
 
 def get_wine_by_id(wine_id):
     connection = sqlite3.connect('wines.db')
@@ -25,7 +24,7 @@ def get_wine_by_id(wine_id):
     cursor.execute('SELECT * FROM wines WHERE id = ?', (wine_id,))
     wine = cursor.fetchone()
     connection.close()
-    return Wine(*wine) if wine else None
+    return wine if wine else None
 
 def update_wine(wine_id, brand, year, price, region, description, nutrition, supplier, stock):
     connection = sqlite3.connect('wines.db')
@@ -52,7 +51,7 @@ def get_wines_by_supplier(supplier_id):
     cursor.execute('SELECT * FROM wines WHERE supplier = ?', (supplier_id,))
     wines = cursor.fetchall()
     connection.close()
-    return [Wine(*wine) for wine in wines]
+    return wines
 
 def get_wines_by_region(region):
     connection = sqlite3.connect('wines.db')
@@ -60,7 +59,7 @@ def get_wines_by_region(region):
     cursor.execute('SELECT * FROM wines WHERE region = ?', (region,))
     wines = cursor.fetchall()
     connection.close()
-    return [Wine(*wine) for wine in wines]
+    return wines
 
 def get_wines_by_price(price):
     connection = sqlite3.connect('wines.db')
@@ -68,7 +67,7 @@ def get_wines_by_price(price):
     cursor.execute('SELECT * FROM wines WHERE price = ?', (price,))
     wines = cursor.fetchall()
     connection.close()
-    return [Wine(*wine) for wine in wines]
+    return wines
 
 def get_wines_by_year(year):
     connection = sqlite3.connect('wines.db')
@@ -76,4 +75,4 @@ def get_wines_by_year(year):
     cursor.execute('SELECT * FROM wines WHERE year = ?', (year,))
     wines = cursor.fetchall()
     connection.close()
-    return [Wine(*wine) for wine in wines]
+    return wines
