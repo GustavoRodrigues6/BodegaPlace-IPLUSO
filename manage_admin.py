@@ -1,5 +1,4 @@
 import sqlite3
-from wines import Wine
 
 def update_wine(wine_id, brand, year, price, region, description, nutrition, supplier, stock):
     """
@@ -34,3 +33,18 @@ def delete_wine(wine_id):
     cursor.execute('DELETE FROM wines WHERE id = ?', (wine_id,))
     connection.commit()
     connection.close()
+
+def search_user_by_nif(user_nif):
+    """
+    Search user by NIF
+    :param user_nif: User NIF
+    :return: User ID
+    """
+    connection = sqlite3.connect("users.db")
+    cursor = connection.cursor()
+    cursor.execute("SELECT id FROM users WHERE nif = ?", (user_nif,))
+    result = cursor.fetchone()
+    connection.close()
+    if result:
+        return result[0]
+    return None
