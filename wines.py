@@ -9,7 +9,7 @@ cursor.execute('''
     price DOUBLE,
     region TEXT,
     description TEXT,
-    nutrition TEXT,
+    nutrition DOUBLE,
     supplier INTEGER,
     stock INTEGER,
     FOREIGN KEY (supplier) REFERENCES users(id)
