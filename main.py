@@ -12,17 +12,6 @@ from utils_tkinter import (
 )
 import wines
 import db_wines
-def on_submit():
-    name = entry_name.get()
-    if not name.strip():
-        show_error_message("Error", "Name cannot be empty!")
-    else:
-        show_info_message("Success", f"Hello, {name}!")
-
-def on_clear():
-    """Clear all widgets on the frame and display a message."""
-    if show_confirmation_message("Confirm", "Are you sure you want to clear the screen?"):
-        clear_screen(app_frame)
 
 app = ctk.CTk()
 app.title("CustomTkinter Utilities Demo")

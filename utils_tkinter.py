@@ -55,28 +55,20 @@ def center_window(window: ctk.CTk, width: int, height: int):
 def table_wines(parent: ctk.CTk):
     frame_cabecalho = ctk.CTkFrame(parent, width=500, height=30)
     frame_cabecalho.pack(pady=(10, 0), padx=10)
-    ctk.CTkLabel(frame_cabecalho, text="Marca", font=("Arial", 12, "bold"), anchor="w", width=140).grid(row=0, column=1, padx=(10, 5), pady=2)
+    ctk.CTkLabel(frame_cabecalho, text="Marca", font=("Arial", 12, "bold"), anchor="w", width=150).grid(row=0, column=1, padx=(10, 5), pady=2)
     ctk.CTkLabel(frame_cabecalho, text="Ano", font=("Arial", 12, "bold"), anchor="center", width=50).grid(row=0, column=2, padx=5, pady=2)
     ctk.CTkLabel(frame_cabecalho, text="Preço", font=("Arial", 12, "bold"), anchor="center", width=50).grid(row=0, column=3, padx=5, pady=2)
-    ctk.CTkLabel(frame_cabecalho, text="Região", font=("Arial", 12, "bold"), anchor="center", width=82).grid(row=0, column=4, padx=5, pady=2)
-    ctk.CTkLabel(frame_cabecalho, text="Descrição", font=("Arial", 12, "bold"), anchor="center", width=82).grid(row=0, column=4, padx=5, pady=2)
-    ctk.CTkLabel(frame_cabecalho, text="Nutrição", font=("Arial", 12, "bold"), anchor="center", width=82).grid(row=0, column=4, padx=5, pady=2)
-    ctk.CTkLabel(frame_cabecalho, text="Fornecedor", font=("Arial", 12, "bold"), anchor="center", width=82).grid(row=0, column=4, padx=5, pady=2)
-    ctk.CTkLabel(frame_cabecalho, text="Stock", font=("Arial", 12, "bold"), anchor="center", width=82).grid(row=0, column=4, padx=5, pady=2)
+    ctk.CTkLabel(frame_cabecalho, text="Região", font=("Arial", 12, "bold"), anchor="w", width=120).grid(row=0, column=4, padx=5, pady=2)
 
-    frame_tabela = ctk.CTkScrollableFrame(parent, width=350, height=250)
+    frame_tabela = ctk.CTkScrollableFrame(parent, width=450, height=250)
     frame_tabela.pack(pady=(0, 10), padx=10)
 
     wines = get_wines()
     if wines:
         for i, wine in enumerate(wines):
             ctk.CTkLabel(frame_tabela, text=f"{wine[1]}", anchor="w", width=150).grid(row=i + 1, column=1, padx=5, pady=2)
-            ctk.CTkLabel(frame_tabela, text=f"{wine[2]}", anchor="w", width=50).grid(row=i + 1, column=2, padx=5, pady=2)
+            ctk.CTkLabel(frame_tabela, text=f"{wine[2]}", anchor="center", width=50).grid(row=i + 1, column=2, padx=5, pady=2)
             ctk.CTkLabel(frame_tabela, text=f"{wine[3]}", anchor="center", width=50).grid(row=i + 1, column=3, padx=5, pady=2)
-            ctk.CTkLabel(frame_tabela, text=f"{wine[4]}", anchor="center", width=50).grid(row=i + 1, column=4, padx=5, pady=2)
-            ctk.CTkLabel(frame_tabela, text=f"{wine[5]}", anchor="center", width=50).grid(row=i + 1, column=4, padx=5, pady=2)
-            ctk.CTkLabel(frame_tabela, text=f"{wine[6]}", anchor="center", width=50).grid(row=i + 1, column=4, padx=5, pady=2)
-            ctk.CTkLabel(frame_tabela, text=f"{wine[7]}", anchor="center", width=50).grid(row=i + 1, column=4, padx=5, pady=2)
-            ctk.CTkLabel(frame_tabela, text=f"{wine[8]}", anchor="center", width=50).grid(row=i + 1, column=4, padx=5, pady=2)
+            ctk.CTkLabel(frame_tabela, text=f"{wine[4]}", anchor="w", width=120).grid(row=i + 1, column=4, padx=5, pady=2)
     else:
         ctk.CTkLabel(frame_tabela, text="Nenhum usuário cadastrado!", font=("Arial", 12), anchor="center").grid(row=1, column=0, columnspan=5, pady=10)
