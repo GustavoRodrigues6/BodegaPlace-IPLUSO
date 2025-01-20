@@ -27,8 +27,8 @@ def create_button(parent: ctk.CTk, text: str, command, font: tuple = ("Arial", 1
     button = ctk.CTkButton(parent, text=text, command=command, font=font)
     return button
 
-def create_entry(parent: ctk.CTk, placeholder: str = "", font: tuple = ("Arial", 12)) -> ctk.CTkEntry:
-    entry = ctk.CTkEntry(parent, placeholder_text=placeholder, font=font)
+def create_entry(parent: ctk.CTk, placeholder: str = "", font: tuple = ("Arial", 12), show: str = "") -> ctk.CTkEntry:
+    entry = ctk.CTkEntry(parent, placeholder_text=placeholder, font=font, show=show)
     return entry
 
 def center_window(window: ctk.CTk, width: int, height: int):
@@ -57,17 +57,14 @@ def table_wines(parent: ctk.CTk):
             ctk.CTkLabel(frame_tabela, text=f"{wine[3]}", anchor="center", width=50).grid(row=i + 1, column=3, padx=5, pady=2)
             ctk.CTkLabel(frame_tabela, text=f"{wine[4]}", anchor="w", width=120).grid(row=i + 1, column=4, padx=5, pady=2)
     else:
-        ctk.CTkLabel(frame_tabela, text="Nenhum usuário cadastrado!", font=("Arial", 12), anchor="center").grid(row=1, column=0, columnspan=5, pady=10)
-
+        ctk.CTkLabel(frame_tabela, text="Nenhum vinho cadastrado!", font=("Arial", 12), anchor="center").grid(row=1, column=0, columnspan=5, pady=10)
 
 def button_add_wine(parent: ctk.CTk):
-
     input_fields = {}
     labels = ["Brand", "Year", "Price", "Region", "Description", "Nutrition", "Supplier", "Stock"]
 
     for i, label_text in enumerate(labels):
-        ctk.CTkLabel(parent, text=f"{label_text}:", font=("Arial", 12), anchor="w").grid(row=i, column=0, padx=10,
-                                                                                         pady=5, sticky="w")
+        ctk.CTkLabel(parent, text=f"{label_text}:", font=("Arial", 12), anchor="w").grid(row=i, column=0, padx=10, pady=5, sticky="w")
         entry = create_entry(parent)
         entry.grid(row=i, column=1, padx=10, pady=5, sticky="w")
         input_fields[label_text] = entry

@@ -34,7 +34,8 @@ def create_sales_table():
 # Function to view the monthly sales table
 def view_sales_table():
     conn = sqlite3.connect('sales.db')
-    df = pd.read_sql_query('SELECT * FROM monthly_sales', conn)
+    cursor = conn.cursor()
+    df = cursor.execute('SELECT * FROM monthly_sales', conn)
     conn.close()
     print(df)
     return df
@@ -73,7 +74,8 @@ view_sales('March', 2023)
 # Function to display the sales table using Tkinter
 def display_sales_table():
     conn = sqlite3.connect('sales.db')
-    df = pd.read_sql_query('SELECT * FROM monthly_sales', conn)
+    cursor = conn.cursor()
+    df = cursor.execute('SELECT * FROM monthly_sales', conn)
     conn.close()
 
     root = tk.Tk()
