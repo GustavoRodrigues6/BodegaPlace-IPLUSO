@@ -1,15 +1,5 @@
 import customtkinter as ctk
-from utils_tkinter import (
-    clear_screen,
-    create_label,
-    create_button,
-    create_entry,
-    show_info_message,
-    show_error_message,
-    center_window,
-    table_wines,
-    button_add_wine
-)
+from utils_tkinter import *
 import sqlite3
 
 app = ctk.CTk()
@@ -18,6 +8,8 @@ center_window(app, 800, 700)
 
 app_frame = ctk.CTkFrame(app)
 app_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
+
+cart = []
 
 def register_user():
     clear_screen(app_frame)
@@ -94,12 +86,96 @@ def show_login():
 
 def show_admin_view(user_id):
     clear_screen(app_frame)
-    button_add_wine(app_frame)
-    
+    table_wines_admin(app_frame)
+    add_wine_form(app_frame)
+
+def add_wine_form(parent):
+    input_fields = {}
+    labels = ["Brand", "Year", "Price", "Region", "Description", "Nutrition", "Supplier", "Stock"]
+
+    for i, label_text in enumerate(labels):
+        create_label(parent, text=f"{label_text}:", font=("Arial", 12), anchor="w").grid(row=i + 10, column=0, padx=10, pady=5, sticky="w")
+        entry = create_entry(parent)
+        entry.grid(row=i + 10, column=1, padx=10, pady=5, sticky="w")
+        input_fields[label_text] = entry
+
+    def submit_wine():
+        try:
+            brand = input_fields["Brand"].get()
+            year = int(input_fields["Year"].get())
+            price = float(input_fields["Price"].get())
+            region = input_fields["Region"].get()
+            description = input_fields["Description"].get()
+            nutrition = float(input_fields["Nutrition"].get())
+            supplier = int(input_fields["Supplier"].get())
+            stock = int(input_fields["Stock"].get())
+            insert_wine(brand, year, price, region, description, nutrition, supplier, stock)
+            show_info_message("Success", "Wine added successfully!")
+            show_admin_view(None)
+        except ValueError:
+            show_error_message("Error", "Invalid input. Please check your entries.")
+        except sqlite3.Error as e:
+            show_error_message("Database Error", f"An error occurred: {e}")
+
+    submit_button = create_button(parent, text="Add Wine", command=submit_wine, font=("Arial", 12))
+    submit_button.grid(row=len(labels) + 10, column=0, columnspan=2, pady=10)
+
+    submit_button = create_button(parent, text="Analyze", command=Analyse_sales, font=("Arial", 12))
+    submit_button.grid(row=len(labels) + 10, column=1, columnspan=3, pady=10)
+
+def Analyse_sales():
+    analyse = ctk.CTk()
+    analyse.title("Analyse Sales")
+    center_window(analyse, 800, 700)
+
+    analyse_frame = ctk.CTkFrame(analyse)
+    analyse_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
+    create_label(analyse_frame, text="Sales Analysis", font=("Arial", 16), anchor="w").grid(row=0, column=0, padx=10, pady=5, sticky="w")
+
+    # Create table headers
+    headers = ["ID", "Month", "Year", "Sales Value"]
+    for col, header in enumerate(headers):
+        create_label(analyse_frame, text=header, font=("Arial", 12, "bold"), anchor="w").grid(row=1, column=col, padx=10, pady=5, sticky="w")
+
+    # Fetch sales data
+    connection = sqlite3.connect('sales.db')
+    cursor = connection.cursor()
+    cursor.execute('SELECT * FROM monthly_sales')
+    sales = cursor.fetchall()
+    connection.close()
+
+    # Display sales data
+    total_sales = 0
+    for i, sale in enumerate(sales):
+        for j, value in enumerate(sale):
+            create_label(analyse_frame, text=str(value), font=("Arial", 12), anchor="w").grid(row=i + 2, column=j, padx=10, pady=5, sticky="w")
+        total_sales += sale[3]
+
+    # Display total sales
+    create_label(analyse_frame, text=f"Total Sales: ${total_sales:.2f}", font=("Arial", 12, "bold"), anchor="w").grid(row=len(sales) + 2, column=0, padx=10, pady=5, sticky="w", columnspan=4)
+
+    analyse.mainloop()
+
+def search_wines(user_id):
+    search_frame = ctk.CTkFrame(app_frame)
+    search_frame.grid(row=0, column=0, padx=10, pady=5, sticky="w")
+
+    search_entry = create_entry(search_frame)
+    search_entry.grid(row=0, column=0, padx=10, pady=5, sticky="w")
+
+    search_button = create_button(search_frame, text="Search", command=lambda: search_wines_results(app_frame, search_entry.get()), font=("Arial", 12))
+    search_button.grid(row=0, column=1, padx=10, pady=5, sticky="w")
+
+    buy_button = create_button(search_frame, text="Buy", command=lambda: buy_wine(search_entry.get(), user_id), font=("Arial", 12))
+    buy_button.grid(row=0, column=2, padx=10, pady=5, sticky="w")
+
+    cart_button = create_button(search_frame, text="Cart", command=lambda: show_cart(user_id), font=("Arial", 12))
+    cart_button.grid(row=0, column=3, padx=10, pady=5, sticky="w")
 
 def show_user_view(user_id):
     clear_screen(app_frame)
-    table_wines(app_frame)
+    search_wines(user_id)
+    table_wines_user(app_frame)
 
 # Show login form initially
 show_login()

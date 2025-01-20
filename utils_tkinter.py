@@ -38,16 +38,16 @@ def center_window(window: ctk.CTk, width: int, height: int):
     y = (screen_height // 2) - (height // 2)
     window.geometry(f"{width}x{height}+{x}+{y}")
 
-def table_wines(parent: ctk.CTk):
+def table_wines_admin(parent: ctk.CTk):
     frame_cabecalho = ctk.CTkFrame(parent, width=500, height=30)
-    frame_cabecalho.pack(pady=(10, 0), padx=10)
+    frame_cabecalho.grid(row=0, column=0, padx=10, pady=5, sticky="w")
     ctk.CTkLabel(frame_cabecalho, text="Marca", font=("Arial", 12, "bold"), anchor="w", width=150).grid(row=0, column=1, padx=(10, 5), pady=2)
     ctk.CTkLabel(frame_cabecalho, text="Ano", font=("Arial", 12, "bold"), anchor="center", width=50).grid(row=0, column=2, padx=5, pady=2)
     ctk.CTkLabel(frame_cabecalho, text="Preço", font=("Arial", 12, "bold"), anchor="center", width=50).grid(row=0, column=3, padx=5, pady=2)
     ctk.CTkLabel(frame_cabecalho, text="Região", font=("Arial", 12, "bold"), anchor="w", width=120).grid(row=0, column=4, padx=5, pady=2)
 
     frame_tabela = ctk.CTkScrollableFrame(parent, width=450, height=250)
-    frame_tabela.pack(pady=(0, 10), padx=10)
+    frame_tabela.grid(row=1, column=0, padx=10, pady=5, sticky="w")
 
     wines = get_wines()
     if wines:
@@ -59,33 +59,75 @@ def table_wines(parent: ctk.CTk):
     else:
         ctk.CTkLabel(frame_tabela, text="Nenhum vinho cadastrado!", font=("Arial", 12), anchor="center").grid(row=1, column=0, columnspan=5, pady=10)
 
-def button_add_wine(parent: ctk.CTk):
-    input_fields = {}
-    labels = ["Brand", "Year", "Price", "Region", "Description", "Nutrition", "Supplier", "Stock"]
+def table_wines_user(parent: ctk.CTk, search_term: str = ""):
+    frame_cabecalho = ctk.CTkFrame(parent, width=500, height=30)
+    frame_cabecalho.grid(row=1, column=0, padx=10, pady=5, sticky="w")
+    ctk.CTkLabel(frame_cabecalho, text="Marca", font=("Arial", 12, "bold"), anchor="w", width=150).grid(row=0, column=1, padx=(10, 5), pady=2)
+    ctk.CTkLabel(frame_cabecalho, text="Ano", font=("Arial", 12, "bold"), anchor="center", width=50).grid(row=0, column=2, padx=5, pady=2)
+    ctk.CTkLabel(frame_cabecalho, text="Preço", font=("Arial", 12, "bold"), anchor="center", width=50).grid(row=0, column=3, padx=5, pady=2)
+    ctk.CTkLabel(frame_cabecalho, text="Região", font=("Arial", 12, "bold"), anchor="w", width=120).grid(row=0, column=4, padx=5, pady=2)
 
-    for i, label_text in enumerate(labels):
-        ctk.CTkLabel(parent, text=f"{label_text}:", font=("Arial", 12), anchor="w").grid(row=i, column=0, padx=10, pady=5, sticky="w")
-        entry = create_entry(parent)
-        entry.grid(row=i, column=1, padx=10, pady=5, sticky="w")
-        input_fields[label_text] = entry
+    frame_tabela = ctk.CTkScrollableFrame(parent, width=450, height=250)
+    frame_tabela.grid(row=2, column=0, padx=10, pady=5, sticky="w")
 
-    def submit_wine():
-        try:
-            brand = input_fields["Brand"].get()
-            year = int(input_fields["Year"].get())
-            price = float(input_fields["Price"].get())
-            region = input_fields["Region"].get()
-            description = input_fields["Description"].get()
-            nutrition = float(input_fields["Nutrition"].get())
-            supplier = int(input_fields["Supplier"].get())
-            stock = int(input_fields["Stock"].get())
-            insert_wine(brand, year, price, region, description, nutrition, supplier, stock)
-            show_info_message("Success", "Wine added successfully!")
-            clear_screen(parent)
-        except ValueError:
-            show_error_message("Error", "Invalid input. Please check your entries.")
-        except sqlite3.Error as e:
-            show_error_message("Database Error", f"An error occurred: {e}")
+    wines = get_wines()
+    if wines:
+        filtered_wines = [wine for wine in wines if search_term.lower() in wine[1].lower()]
+        for i, wine in enumerate(filtered_wines):
+            ctk.CTkLabel(frame_tabela, text=f"{wine[1]}", anchor="w", width=150).grid(row=i + 1, column=1, padx=5, pady=2)
+            ctk.CTkLabel(frame_tabela, text=f"{wine[2]}", anchor="center", width=50).grid(row=i + 1, column=2, padx=5, pady=2)
+            ctk.CTkLabel(frame_tabela, text=f"{wine[3]}", anchor="center", width=50).grid(row=i + 1, column=3, padx=5, pady=2)
+            ctk.CTkLabel(frame_tabela, text=f"{wine[4]}", anchor="w", width=120).grid(row=i + 1, column=4, padx=5, pady=2)
+    else:
+        ctk.CTkLabel(frame_tabela, text="Nenhum vinho cadastrado!", font=("Arial", 12), anchor="center").grid(row=1, column=0, columnspan=5, pady=10)
 
-    submit_button = create_button(parent, text="Add Wine", command=submit_wine, font=("Arial", 12))
-    submit_button.grid(row=len(labels), column=0, columnspan=2, pady=10)
+def search_wines_results(parent: ctk.CTk, search_term: str):
+    clear_screen(parent)
+    table_wines_user(parent, search_term)
+
+def buy_wine(wine_name: str, user_id: int):
+    connection = sqlite3.connect('cart.db')
+    cursor = connection.cursor()
+    wines = get_wines()
+    selected_wine = next((wine for wine in wines if wine_name.lower() in wine[1].lower()), None)
+    
+    if selected_wine:
+        cursor.execute('INSERT INTO cart (user_id, wine_id) VALUES (?, ?)', (user_id, selected_wine[0]))
+        connection.commit()
+        show_info_message("Compra", f"Vinho {selected_wine[1]} adicionado ao carrinho!")
+    else:
+        show_error_message("Erro", "Vinho não encontrado!")
+    connection.close()
+
+def show_cart(user_id: int):
+    connection = sqlite3.connect('cart.db')
+    cursor = connection.cursor()
+    cursor.execute('''
+        SELECT wines.id, wines.brand, wines.year, wines.price, wines.region
+        FROM cart
+        JOIN wines ON cart.wine_id = wines.id
+        WHERE cart.user_id = ?
+    ''', (user_id,))
+    cart_items = cursor.fetchall()
+    connection.close()
+
+    cart_window = ctk.CTk()
+    cart_window.title("Carrinho de Compras")
+    center_window(cart_window, 600, 400)
+
+    cart_frame = ctk.CTkFrame(cart_window)
+    cart_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
+
+    create_label(cart_frame, text="Carrinho de Compras", font=("Arial", 16), anchor="w").grid(row=0, column=0, padx=10, pady=5, sticky="w")
+
+    headers = ["Marca", "Ano", "Preço", "Região"]
+    for col, header in enumerate(headers):
+        create_label(cart_frame, text=header, font=("Arial", 12, "bold"), anchor="w").grid(row=1, column=col, padx=10, pady=5, sticky="w")
+
+    for i, wine in enumerate(cart_items):
+        create_label(cart_frame, text=wine[1], font=("Arial", 12), anchor="w").grid(row=i + 2, column=0, padx=10, pady=5, sticky="w")
+        create_label(cart_frame, text=wine[2], font=("Arial", 12), anchor="center").grid(row=i + 2, column=1, padx=10, pady=5, sticky="w")
+        create_label(cart_frame, text=wine[3], font=("Arial", 12), anchor="center").grid(row=i + 2, column=2, padx=10, pady=5, sticky="w")
+        create_label(cart_frame, text=wine[4], font=("Arial", 12), anchor="w").grid(row=i + 2, column=3, padx=10, pady=5, sticky="w")
+
+    cart_window.mainloop()

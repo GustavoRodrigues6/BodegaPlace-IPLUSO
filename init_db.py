@@ -93,8 +93,25 @@ def create_sales_table():
     conn.commit()
     conn.close()
 
+
+def create_cart_db():
+    connection = sqlite3.connect('cart.db')
+    cursor = connection.cursor()
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS cart(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER,
+        wine_id INTEGER,
+        FOREIGN KEY(user_id) REFERENCES users(id)
+        )
+    ''')
+    connection.commit()
+    connection.close()
+
 if __name__ == "__main__":
     create_users_db()
     create_wines_db()
     create_sales_table()
+    create_cart_db()
     print("Databases created and populated with sample data.")
