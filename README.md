@@ -15,7 +15,7 @@ BodegaPlace é a sua plataforma completa para gerenciar sua coleção de vinhos.
 
 **- Exportação de dados:** Permite exportar os dados de vendas em formato CSV para análise mais detalhada.
 ### ⚙️ Funcionalidades para Usuários:
-**- Registro e autenticação:** Criação de contas de usuário com informações pessoais e login seguro.
+**- Registo e autenticação:** Criação de contas de usuário com informações pessoais e login seguro.
 
 **- Exploração do catálogo:** Permite aos usuários navegar e pesquisar por vinhos disponíveis.
 
@@ -38,8 +38,8 @@ Certifique-se de ter o **Python 3.10** ou superior instalado e as dependências 
 ### 1. Clone o repositório:
 
 ```bash
-git clone https://github.com/kalebeccs/bodegaplace.git
-cd bodegaplace
+git clone https://github.com/GustavoRodrigues6/bodegaplace-ipluso.git
+cd bodegaplace-ipluso
 ```
 
 ### 2. Crie um ambiente virtual:
