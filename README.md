@@ -60,20 +60,3 @@ pip install -r requirements.txt
 ```bash
 python src/app.py
 ```
-
-## 🗂️ Estrutura do Projeto
-
-```plaintext
-📁 bodegaplace
-├── 📂 assets                 # Recursos visuais
-├── 📂 db
-│   ├── db.py                 # Funções para manipulação do banco de dados
-├── 📂 src
-│   ├── app.py                # Arquivo principal da aplicação
-│   ├── interface.py          # Funções da interface gráfica
-│   ├── users.py              # Gerenciamento de usuários
-│   └── utils.py              # Funções auxiliares
-├── README.md                 # Documentação do projeto
-```
-
-
