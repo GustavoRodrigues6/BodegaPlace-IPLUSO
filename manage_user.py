@@ -1,5 +1,17 @@
 import sqlite3
-from users import User  
+from users import User 
+
+class User:
+    def __init__(self, id, username, email, password, address1, address2, nif, is_admin):
+        self.id = id
+        self.username = username
+        self.email = email
+        self.password = password
+        self.address1 = address1
+        self.address2 = address2
+        self.nif = nif
+        self.is_admin = is_admin
+
 
 def user_register(username, email, password, address1, address2):
     connection = sqlite3.connect("users.db")

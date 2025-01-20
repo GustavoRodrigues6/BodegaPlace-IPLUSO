@@ -2,6 +2,44 @@ import customtkinter as ctk
 from utils_tkinter import *
 import sqlite3
 
+def delete_user(user_id):
+    connection = sqlite3.connect('users.db')
+    cursor = connection.cursor()
+    cursor.execute('DELETE FROM users WHERE id = ?', (user_id,))
+    connection.commit()
+    connection.close()
+
+def update_user(user_id, username, email, address1, address2):
+    connection = sqlite3.connect('users.db')
+    cursor = connection.cursor()
+    cursor.execute('''
+        UPDATE users
+        SET username = ?, email = ?, address1 = ?, address2 = ?
+        WHERE id = ?
+    ''', (username, email, address1, address2, user_id))
+    connection.commit()
+    connection.close()
+
+def get_user(user_id):
+    connection = sqlite3.connect('users.db')
+    cursor = connection.cursor()
+    cursor.execute('SELECT username, email, password, address1, address2, nif FROM users WHERE id = ?', (user_id,))
+    user = cursor.fetchone()
+    connection.close()
+    if user:
+        return {
+            "username": user[0],
+            "email": user[1],
+            "password": user[2],
+            "address1": user[3],
+            "address2": user[4],
+            "nif": user[5]
+        }
+    else:
+        raise ValueError("User not found")
+
+
+
 app = ctk.CTk()
 app.title("Wine Management System")
 center_window(app, 800, 700)
@@ -176,6 +214,77 @@ def show_user_view(user_id):
     clear_screen(app_frame)
     search_wines(user_id)
     table_wines_user(app_frame)
+
+    edit_button = create_button(app_frame, text="Edit Account", command=lambda: edit_user_account(user_id), font=("Arial", 12))
+    edit_button.grid(row=3, column=0, padx=10, pady=5, sticky="w")
+
+    delete_button = create_button(app_frame, text="Delete Account", command=lambda: delete_user_account(user_id), font=("Arial", 12))
+    delete_button.grid(row=3, column=1, padx=10, pady=5, sticky="w")
+
+def edit_user_account(user_id):
+    clear_screen(app_frame)
+    input_fields = {}
+    labels = ["Username", "Email", "Password", "Address1", "Address2", "NIF"]
+
+    user_data = get_user(user_id)
+
+    for i, label_text in enumerate(labels):
+        create_label(app_frame, text=f"{label_text}:", font=("Arial", 12), anchor="w").grid(row=i, column=0, padx=10, pady=5, sticky="w")
+        entry = create_entry(app_frame)
+        entry.grid(row=i, column=1, padx=10, pady=5, sticky="w")
+        entry.insert(0, user_data[label_text.lower()])
+        input_fields[label_text] = entry
+
+    def submit_edit():
+        username = input_fields["Username"].get()
+        email = input_fields["Email"].get()
+        password = input_fields["Password"].get()
+        address1 = input_fields["Address1"].get()
+        address2 = input_fields["Address2"].get()
+        nif = input_fields["NIF"].get()
+
+        try:
+            update_user(user_id, username, email, address1, address2)
+            show_info_message("Success", "Account updated successfully!")
+            show_user_view(user_id)
+        except sqlite3.IntegrityError:
+            show_error_message("Error", "Email already exists.")
+        except Exception as e:
+            show_error_message("Error", f"An error occurred: {e}")
+
+    submit_button = create_button(app_frame, text="Save Changes", command=submit_edit, font=("Arial", 12))
+    submit_button.grid(row=len(labels), column=0, columnspan=2, pady=10)
+
+def delete_user_account(user_id):
+    def confirm_delete():
+        try:
+            delete_user(user_id)
+            show_info_message("Success", "Account deleted successfully!")
+            show_login()
+        except Exception as e:
+            show_error_message("Error", f"An error occurred: {e}")
+
+    show_confirmation_message("Are you sure you want to delete your account?", confirm_delete)
+
+def show_confirmation_message(message, confirm_callback):
+    confirmation_window = ctk.CTkToplevel(app)
+    confirmation_window.title("Confirmation")
+    center_window(confirmation_window, 300, 150)
+
+    confirmation_frame = ctk.CTkFrame(confirmation_window)
+    confirmation_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
+
+    create_label(confirmation_frame, text=message, font=("Arial", 12), anchor="w").grid(row=0, column=0, padx=10, pady=5, sticky="w", columnspan=2)
+
+    def on_confirm():
+        confirm_callback()
+        confirmation_window.destroy()
+
+    confirm_button = create_button(confirmation_frame, text="Yes", command=on_confirm, font=("Arial", 12))
+    confirm_button.grid(row=1, column=0, padx=10, pady=5, sticky="w")
+
+    cancel_button = create_button(confirmation_frame, text="No", command=confirmation_window.destroy, font=("Arial", 12))
+    cancel_button.grid(row=1, column=1, padx=10, pady=5, sticky="w")
 
 # Show login form initially
 show_login()
