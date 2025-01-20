@@ -4,14 +4,14 @@ BodegaPlace é a sua plataforma completa para gerenciar sua coleção de vinhos.
 
 ## 📋 Funcionalidades
 
-### Gestão de Estoque:
+### 📦 Gestão de Estoque:
 **Inserção de novos vinhos:** Permite adicionar novos produtos ao catálogo, com informações como marca, preço, região, ano e descrição.
 **Edição de vinhos:** Possibilita a atualização de informações de vinhos já cadastrados.
 **Exclusão de vinhos:** Permite remover vinhos descontinuados do catálogo.
-### Análise de Vendas:
+### 📈 Análise de Vendas:
 **Tabela de vendas mensais:** Apresenta uma visão geral das vendas por mês.
 **Exportação de dados:** Permite exportar os dados de vendas em formato CSV para análise mais detalhada.
-### Funcionalidades para Usuários:
+### ⚙️ Funcionalidades para Usuários:
 **Registro e autenticação:** Criação de contas de usuário com informações pessoais e login seguro.
 **Exploração do catálogo:** Permite aos usuários navegar e pesquisar por vinhos disponíveis.
 **Carrinho de compras:** Possibilita aos usuários adicionar produtos ao carrinho e realizar compras (implementação futura).
@@ -23,7 +23,7 @@ BodegaPlace é a sua plataforma completa para gerenciar sua coleção de vinhos.
 - SQLite3 (banco de dados local)
 - CustomTkinter (interface gráfica)
 
-## ⚙️ Como Executar o Projeto
+## ▶️ Como Executar o Projeto
 
 ### Pré-requisitos
 
