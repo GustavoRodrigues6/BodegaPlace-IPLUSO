@@ -13,7 +13,6 @@ BodegaPlace é a sua plataforma completa para gerenciar sua coleção de vinhos.
 ### 📈 Análise de Vendas:
 **- Tabela de vendas mensais:** Apresenta uma visão geral das vendas por mês.
 
-**- Exportação de dados:** Permite exportar os dados de vendas em formato CSV para análise mais detalhada.
 ### ⚙️ Funcionalidades para Usuários:
 **- Registo e autenticação:** Criação de contas de usuário com informações pessoais e login seguro.
 
