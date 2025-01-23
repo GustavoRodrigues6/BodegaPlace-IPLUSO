@@ -42,21 +42,15 @@ git clone https://github.com/GustavoRodrigues6/bodegaplace-ipluso.git
 cd bodegaplace-ipluso
 ```
 
-### 2. Crie um ambiente virtual:
+### 2. Execute a aplicação:
 
 ```bash
-python -m venv venv
-source venv/bin/activate  # No Windows, use: venv\Scripts\activate
+python init_db.py
 ```
 
-### 3. Instale as dependências:
+
+### 3. Execute a aplicação:
 
 ```bash
-pip install -r requirements.txt
-```
-
-### 4. Execute a aplicação:
-
-```bash
-python src/app.py
+python main.py
 ```
