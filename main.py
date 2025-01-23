@@ -87,6 +87,7 @@ def register_user():
     submit_button = create_button(app_frame, text="Register", command=submit_registration, font=("Arial", 12))
     submit_button.grid(row=len(labels), column=0, columnspan=2, pady=10)
 
+
 def show_login():
     clear_screen(app_frame)
     create_label(app_frame, text="Username:", font=("Arial", 12), anchor="w").grid(row=0, column=0, padx=10, pady=5, sticky="w")
@@ -207,8 +208,12 @@ def search_wines(user_id):
     buy_button = create_button(search_frame, text="Buy", command=lambda: buy_wine(search_entry.get(), user_id), font=("Arial", 12))
     buy_button.grid(row=0, column=2, padx=10, pady=5, sticky="w")
 
-    cart_button = create_button(search_frame, text="Cart", command=lambda: show_cart(user_id), font=("Arial", 12))
-    cart_button.grid(row=0, column=3, padx=10, pady=5, sticky="w")
+def search_wines_results(parent: ctk.CTk, search_term: str):
+    clear_screen(parent)
+    table_wines_user(parent, search_term)
+
+    back_button = create_button(parent, text="Voltar", command=back_command, font=("Arial", 12))
+    back_button.grid(row=3, column=0, padx=10, pady=5, sticky="w")
 
 def show_user_view(user_id):
     clear_screen(app_frame)
@@ -220,6 +225,9 @@ def show_user_view(user_id):
 
     delete_button = create_button(app_frame, text="Delete Account", command=lambda: delete_user_account(user_id), font=("Arial", 12))
     delete_button.grid(row=3, column=1, padx=10, pady=5, sticky="w")
+
+def back_command():
+    show_user_view(app_frame)
 
 def edit_user_account(user_id):
     clear_screen(app_frame)

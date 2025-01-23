@@ -81,10 +81,6 @@ def table_wines_user(parent: ctk.CTk, search_term: str = ""):
     else:
         ctk.CTkLabel(frame_tabela, text="Nenhum vinho cadastrado!", font=("Arial", 12), anchor="center").grid(row=1, column=0, columnspan=5, pady=10)
 
-def search_wines_results(parent: ctk.CTk, search_term: str):
-    clear_screen(parent)
-    table_wines_user(parent, search_term)
-
 def buy_wine(wine_name: str, user_id: int):
     connection = sqlite3.connect('cart.db')
     cursor = connection.cursor()
@@ -131,3 +127,5 @@ def show_cart(user_id: int):
         create_label(cart_frame, text=wine[4], font=("Arial", 12), anchor="w").grid(row=i + 2, column=3, padx=10, pady=5, sticky="w")
 
     cart_window.mainloop()
+
+
