@@ -49,13 +49,7 @@ python -m venv venv
 source venv/bin/activate  # No Windows, use: venv\Scripts\activate
 ```
 
-### 3. Instale as dependências:
-
-```bash
-pip install -r requirements.txt
-```
-
-### 4. Execute a aplicação:
+### 3. Execute a aplicação:
 
 ```bash
 python src/app.py
